@@ -1,30 +1,28 @@
 import { Component } from 'react';
+import { FilmsContext, FilmsContextType } from '../store/films-context';
 
-interface SearchState {
-  searchState: string;
-}
-
-class Search extends Component<object, SearchState> {
-  state: SearchState = {
-    searchState: localStorage.getItem('searchState') || '',
-  };
+class Search extends Component {
+  static contextType = FilmsContext;
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchState: event.target.value.trim() });
+    const { setSearchState } = this.context as FilmsContextType;
+    setSearchState(event.target.value.trim());
   };
 
   handleSearch = () => {
-    localStorage.setItem('searchState', this.state.searchState);
+    const { searchState } = this.context as FilmsContextType;
+    localStorage.setItem('searchState', searchState);
   };
 
   render() {
+    const { searchState } = this.context as FilmsContextType;
     return (
       <div className="flex justify-end gap-5 w-full">
         <input
           className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="text"
           placeholder="Search..."
-          value={this.state.searchState}
+          value={searchState}
           onChange={this.handleChange}
         />
         <button
