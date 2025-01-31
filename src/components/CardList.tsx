@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { FilmsContext, FilmsContextType } from '../store/films-context';
+import Card from './Card';
 
 export default class CardList extends Component {
   static contextType = FilmsContext;
@@ -12,7 +13,7 @@ export default class CardList extends Component {
         ) : (
           <ul>
             {results.map((result, index) => (
-              <li key={index}>{result.title}</li>
+              <Card key={index} film={result} />
             ))}
           </ul>
         )}
