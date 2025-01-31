@@ -7,6 +7,7 @@ export interface FilmsContextType {
   setSearchState: (search: string) => void;
   results: FilmType[];
   fetchFilms: () => void;
+  loading: boolean;
 }
 
 export const FilmsContext = createContext<FilmsContextType>({
@@ -14,6 +15,7 @@ export const FilmsContext = createContext<FilmsContextType>({
   setSearchState: () => {},
   results: [],
   fetchFilms: () => {},
+  loading: false,
 });
 
 interface FilmsProviderProps {
@@ -22,13 +24,14 @@ interface FilmsProviderProps {
 
 export default class FilmsProvider extends Component<
   FilmsProviderProps,
-  { searchState: string; results: FilmType[] }
+  { searchState: string; results: FilmType[]; loading: boolean }
 > {
   constructor(props: FilmsProviderProps) {
     super(props);
     this.state = {
       searchState: localStorage.getItem('searchState') || '',
       results: [],
+      loading: false,
     };
   }
 
@@ -38,8 +41,10 @@ export default class FilmsProvider extends Component<
   };
 
   fetchFilms = async () => {
+    this.setState({ loading: true });
     const results = await fetchFilmsFromAPI(this.state.searchState);
     this.setState({ results });
+    this.setState({ loading: false });
   };
 
   componentDidMount(): void {
@@ -54,6 +59,7 @@ export default class FilmsProvider extends Component<
           setSearchState: this.setSearchState,
           results: this.state.results,
           fetchFilms: this.fetchFilms,
+          loading: this.state.loading,
         }}
       >
         {this.props.children}
