@@ -5,7 +5,7 @@ import { FilmType } from '../api/interface-api';
 export interface FilmsContextType {
   searchState: string;
   setSearchState: (search: string) => void;
-  results: FilmType[];
+  results: FilmType[] | string;
   fetchFilms: () => void;
   loading: boolean;
 }

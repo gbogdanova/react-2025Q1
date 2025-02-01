@@ -6,6 +6,9 @@ export default class CardList extends Component {
   static contextType = FilmsContext;
   render() {
     const { results } = this.context as FilmsContextType;
+    if (typeof results === 'string') {
+      return <p className="text-red-500">{results}</p>;
+    }
     return (
       <>
         {results.length === 0 ? (

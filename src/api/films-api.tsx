@@ -3,11 +3,10 @@ const fetchFilmsFromAPI = async (searchState: string) => {
   try {
     const response = await fetch(`https://swapi.dev/api/films${searchValue}`);
     const data = await response.json();
-    console.log(data.results);
     return data.results || [];
   } catch (error) {
-    console.error('Error fetching films:', error);
-    return [];
+    console.error(error);
+    return `Oops! Something went wrong while fetching the films. Please check your console for more details.`;
   }
 };
 export default fetchFilmsFromAPI;
