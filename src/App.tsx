@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Main from './components/Main';
 import FilmsProvider from './store/films-context';
 import ErrorBoundary from './components/ErrorBoundary';
+import TestBtn from './components/TestBtn';
 
 class App extends Component {
   render() {
@@ -12,6 +13,7 @@ class App extends Component {
           <Header />
           <Main />
         </FilmsProvider>
+        <TestBtn />
       </ErrorBoundary>
     );
   }
