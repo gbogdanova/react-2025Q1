@@ -7,14 +7,20 @@ export default class CardList extends Component {
   render() {
     const { results } = this.context as FilmsContextType;
     if (typeof results === 'string') {
-      return <p className="text-red-500">{results}</p>;
+      return (
+        <div className="flex justify-center items-center text-red-500 h-100">
+          <p>{results}</p>
+        </div>
+      );
     }
     return (
       <>
         {results.length === 0 ? (
-          <p>No results found for your search.</p>
+          <div className="flex justify-center items-center text-red-500 h-100">
+            <p>No results found for your search.</p>
+          </div>
         ) : (
-          <ul>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {results.map((result, index) => (
               <Card key={index} film={result} />
             ))}

@@ -9,6 +9,10 @@ export default class Main extends Component {
   render() {
     const { loading } = this.context as FilmsContextType;
 
-    return <main>{loading ? <Spinner /> : <CardList />}</main>;
+    return (
+      <main className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 p-6">
+        {loading ? <Spinner /> : <CardList />}
+      </main>
+    );
   }
 }

@@ -22,9 +22,12 @@ export default class ErrorBoundary extends Component<
   render() {
     if (this.state.hasError) {
       return (
-        <p className="text-red-500">
-          Something went wrong. ErrorBoundary caught it!
-        </p>
+        <div className="flex justify-center items-center text-red-500 h-screen">
+          <p>
+            Error Boundary testing success! Look at the console for more
+            details.
+          </p>
+        </div>
       );
     }
     return this.props.children;
