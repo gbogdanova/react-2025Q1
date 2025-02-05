@@ -15,7 +15,6 @@ export default function FilmsProvider({ children }: FilmsProviderProps) {
   const [loading, setLoading] = useState<boolean>(false);
 
   const updateSearchState = (search: string) => {
-    localStorage.setItem('searchState', search);
     setSearchState(search);
   };
 

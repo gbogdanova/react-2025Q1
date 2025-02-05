@@ -1,18 +1,17 @@
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import FilmsContext from '../store/films-context';
+import useSearchQuery from '../hooks/useSearchQuery';
 
 export default function Search() {
   const { updateSearchState } = useContext(FilmsContext);
 
-  const [tempSearchState, setTempSearchState] = useState<string>(
-    localStorage.getItem('searchState') || ''
-  );
+  const { searchQuery, setSearchQuery } = useSearchQuery();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTempSearchState(event.target.value.trim());
+    setSearchQuery(event.target.value.trim());
   };
 
   const handleSearch = () => {
-    updateSearchState(tempSearchState);
+    updateSearchState(searchQuery);
   };
 
   return (
@@ -21,7 +20,7 @@ export default function Search() {
         className="border  border-[#1A237E] rounded-lg p-2 focus:outline-none shadow-lg shadow-blue-500/50 focus:ring-[#ffffff]"
         type="text"
         placeholder="Search..."
-        value={tempSearchState}
+        value={searchQuery}
         onChange={handleChange}
       />
       <button
