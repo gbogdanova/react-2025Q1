@@ -1,7 +1,9 @@
-const fetchFilmsFromAPI = async (searchState: string) => {
-  const searchValue = searchState ? `?search=${searchState}` : '';
+const fetchFromAPI = async (searchState: string) => {
   try {
-    const response = await fetch(`https://swapi.dev/api/films${searchValue}`);
+    const response = await fetch(
+      `https://swapi.dev/api/planets?search=${searchState}`
+      //&page=${page}
+    );
     const data = await response.json();
     return data.results || [];
   } catch (error) {
@@ -9,4 +11,4 @@ const fetchFilmsFromAPI = async (searchState: string) => {
     return `Oops! Something went wrong while fetching the films. Please check your console for more details.`;
   }
 };
-export default fetchFilmsFromAPI;
+export default fetchFromAPI;

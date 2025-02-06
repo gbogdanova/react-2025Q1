@@ -1,4 +1,4 @@
-import FilmsContext from '../store/films-context';
+import FilmsContext from '../store/planets-context';
 import Spinner from './Spinner';
 import CardList from './CardList';
 import { useContext } from 'react';

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import FilmsContext from '../store/films-context';
+import FilmsContext from '../store/planets-context';
 import useSearchQuery from '../hooks/useSearchQuery';
 
 export default function Search() {

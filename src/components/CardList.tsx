@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import FilmsContext from '../store/films-context';
+import InfContext from '../store/planets-context';
 import Card from './Card';
 
 export default function CardList() {
-  const { results } = useContext(FilmsContext);
+  const { results } = useContext(InfContext);
 
   if (typeof results === 'string') {
     return (
@@ -21,7 +21,7 @@ export default function CardList() {
       ) : (
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {results.map((result, index) => (
-            <Card key={index} film={result} />
+            <Card key={index} planet={result} />
           ))}
         </ul>
       )}

@@ -1,16 +1,16 @@
 import Header from './components/Header';
 import Main from './components/Main';
-import FilmsProvider from './store/films-proveder';
+import InfProvider from './store/planets-proveder';
 import ErrorBoundary from './components/ErrorBoundary';
 import TestBtn from './components/TestBtn';
 
 export default function App() {
   return (
     <ErrorBoundary>
-      <FilmsProvider>
+      <InfProvider>
         <Header />
         <Main />
-      </FilmsProvider>
+      </InfProvider>
       <TestBtn />
     </ErrorBoundary>
   );

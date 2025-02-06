@@ -1,28 +1,29 @@
 import { ReactNode, useState, useEffect } from 'react';
-import fetchFilmsFromAPI from '../api/films-api';
-import { FilmType } from '../api/interface-api';
-import FilmsContext from './films-context';
+import fetchFromAPI from '../api/planets-api';
+import { PlanetsType } from '../api/interface-api';
+import InfContext from './planets-context';
 
-interface FilmsProviderProps {
+interface PlanetsProviderProps {
   children: ReactNode;
 }
 
-export default function FilmsProvider({ children }: FilmsProviderProps) {
+export default function InfProvider({ children }: PlanetsProviderProps) {
   const [searchState, setSearchState] = useState<string>(
     localStorage.getItem('searchState') || ''
   );
-  const [results, setResults] = useState<FilmType[] | string>([]);
+  const [results, setResults] = useState<PlanetsType[] | string>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  //const [page, setPage] = useState<number>(1);
 
   const updateSearchState = (search: string) => {
     setSearchState(search);
   };
 
   useEffect(() => {
-    const fetchFilms = async () => {
+    const fetch = async () => {
       setLoading(true);
       try {
-        const fetchedResults = await fetchFilmsFromAPI(searchState);
+        const fetchedResults = await fetchFromAPI(searchState);
         setResults(fetchedResults);
       } catch (error) {
         console.error('Error fetching films:', error);
@@ -31,11 +32,11 @@ export default function FilmsProvider({ children }: FilmsProviderProps) {
       }
     };
 
-    fetchFilms();
+    fetch();
   }, [searchState]);
 
   return (
-    <FilmsContext.Provider
+    <InfContext.Provider
       value={{
         searchState,
         updateSearchState,
@@ -44,6 +45,6 @@ export default function FilmsProvider({ children }: FilmsProviderProps) {
       }}
     >
       {children}
-    </FilmsContext.Provider>
+    </InfContext.Provider>
   );
 }

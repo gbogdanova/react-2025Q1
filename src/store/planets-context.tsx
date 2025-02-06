@@ -1,18 +1,18 @@
 import { createContext } from 'react';
-import { FilmType } from '../api/interface-api';
+import { PlanetsType } from '../api/interface-api';
 
-export interface FilmsContextType {
+export interface InfContextType {
   searchState: string;
   updateSearchState: (search: string) => void;
-  results: FilmType[] | string;
+  results: PlanetsType[] | string;
   loading: boolean;
 }
 
-const FilmsContext = createContext<FilmsContextType>({
+const InfContext = createContext<InfContextType>({
   searchState: localStorage.getItem('searchState') || '',
   updateSearchState: () => {},
   results: [],
   loading: false,
 });
 
-export default FilmsContext;
+export default InfContext;
