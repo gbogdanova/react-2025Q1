@@ -8,7 +8,7 @@ export default function Pagination() {
     'text-2xl cursor-pointer disabled:text-gray-500 disabled:cursor-default';
 
   return (
-    <div className="my-3 flex gap-2">
+    <div className="my-3 flex gap-4 justify-center">
       <button
         className={btnClass}
         onClick={() => updatePage(+page - 1)}
