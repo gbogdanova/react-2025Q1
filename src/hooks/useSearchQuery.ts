@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function useSearchQuery() {
   const [searchQuery, setSearchQuery] = useState<string>(
     localStorage.getItem('searchState') || ''
   );
-  useEffect(() => {
+  const saveSearchQuery = () => {
     localStorage.setItem('searchState', searchQuery);
-  }, [searchQuery]);
-
-  return { searchQuery, setSearchQuery };
+  };
+  return { searchQuery, setSearchQuery, saveSearchQuery };
 }

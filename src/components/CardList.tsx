@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import InfContext from '../store/planets-context';
 import Card from './Card';
+import Pagination from './Pagination';
 
 export default function CardList() {
   const { results } = useContext(InfContext);
@@ -19,11 +20,14 @@ export default function CardList() {
           <p>No results found for your search.</p>
         </div>
       ) : (
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {results.map((result, index) => (
-            <Card key={index} planet={result} />
-          ))}
-        </ul>
+        <>
+          <Pagination />
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {results.map((result, index) => (
+              <Card key={index} planet={result} />
+            ))}
+          </ul>
+        </>
       )}
     </>
   );

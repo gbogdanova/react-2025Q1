@@ -6,6 +6,8 @@ export interface InfContextType {
   updateSearchState: (search: string) => void;
   results: PlanetsType[] | string;
   loading: boolean;
+  page: number;
+  updatePage: (newPage: number) => void;
 }
 
 const InfContext = createContext<InfContextType>({
@@ -13,6 +15,8 @@ const InfContext = createContext<InfContextType>({
   updateSearchState: () => {},
   results: [],
   loading: false,
+  page: 1,
+  updatePage: () => {},
 });
 
 export default InfContext;

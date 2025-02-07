@@ -5,12 +5,14 @@ import useSearchQuery from '../hooks/useSearchQuery';
 export default function Search() {
   const { updateSearchState } = useContext(FilmsContext);
 
-  const { searchQuery, setSearchQuery } = useSearchQuery();
+  const { searchQuery, setSearchQuery, saveSearchQuery } = useSearchQuery();
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value.trim());
   };
 
   const handleSearch = () => {
+    saveSearchQuery();
     updateSearchState(searchQuery);
   };
 
