@@ -16,6 +16,7 @@ export default function Details() {
         if (id) {
           setLoading(true);
           const result = await fetchPlanetDetails(id);
+          console.log(result);
           setPlanetDetail(result);
         }
       } catch (error) {

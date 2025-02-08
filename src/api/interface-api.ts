@@ -1,5 +1,5 @@
 export interface PlanetsType {
-  climate: string[];
+  climate: string;
   created: string;
   diameter: string;
   edited: string;
