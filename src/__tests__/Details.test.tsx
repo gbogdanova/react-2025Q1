@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { vi } from 'vitest';
-import Details from './Details';
+import Details from '../components/Details';
 import { fetchPlanetDetails } from '../api/planets-api';
 
 vi.mock('../api/planets-api', () => ({

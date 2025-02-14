@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import Card from './Card';
+import Card from '../components/Card';
 import { PlanetsType } from '../api/interface-api';
 
 const mockPlanet: PlanetsType = {
