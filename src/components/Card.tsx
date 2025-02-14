@@ -11,7 +11,7 @@ export default function Card({ planet }: CardProps) {
   return (
     <li className="flex gap-5 border-1 border-cover p-2">
       <Link to={`/details/${planetId}`} className="flex w-full">
-        <div className="w-[40%]">
+        {/* <div className="w-[40%]">
           <img
             className="h-auto max-w-full object-fill"
             src={`https://starwars-visualguide.com/assets/img/planets/${planetId}.jpg`}
@@ -22,8 +22,8 @@ export default function Card({ planet }: CardProps) {
             }}
             alt={planet.name}
           />
-        </div>
-        <div className="w-[60%]">
+        </div> */}
+        <div>
           <div className="text-xl pb-2 font-bold">{planet.name}</div>
           <div className="text-xl">
             <span className="text-amber-200">Rotation period:</span>{' '}

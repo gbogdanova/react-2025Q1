@@ -16,7 +16,6 @@ export default function Details() {
         if (id) {
           setLoading(true);
           const result = await fetchPlanetDetails(id);
-          console.log(result);
           setPlanetDetail(result);
         }
       } catch (error) {
@@ -44,7 +43,7 @@ export default function Details() {
       <h2 className="text-4xl font-bold mb-2 font-[Orbitron] text-amber-300">
         {planetDetail.name}
       </h2>
-      <div className="flex py-6 justify-center items-center">
+      {/* <div className="flex py-6 justify-center items-center">
         <img
           className="object-center"
           src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg`}
@@ -55,7 +54,7 @@ export default function Details() {
           }}
           alt={planetDetail.name}
         />
-      </div>
+      </div> */}
       <p>
         <span className="font-semibold">Rotation Period:</span>{' '}
         {planetDetail.rotation_period}
