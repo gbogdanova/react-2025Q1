@@ -18,6 +18,7 @@ export default function InfProvider({ children }: PlanetsProviderProps) {
   const [results, setResults] = useState<PlanetsType[] | string>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(initialPage);
+  const [theme, setTheme] = useState<string>('dark');
 
   const updateSearchState = (search: string) => {
     setSearchState(search);
@@ -63,6 +64,8 @@ export default function InfProvider({ children }: PlanetsProviderProps) {
         loading,
         page,
         updatePage,
+        theme,
+        setTheme,
       }}
     >
       {children}

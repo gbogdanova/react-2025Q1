@@ -16,8 +16,8 @@ export default function App() {
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <TestBtn />
       </InfProvider>
-      <TestBtn />
     </ErrorBoundary>
   );
 }

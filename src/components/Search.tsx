@@ -17,9 +17,9 @@ export default function Search() {
   };
 
   return (
-    <div className="flex justify-end gap-3">
+    <div className="flex justify-end gap-3 w-[33%]">
       <input
-        className="border  border-[#1A237E] rounded-lg p-2 focus:outline-none shadow-lg shadow-blue-500/50 focus:ring-[#ffffff]"
+        className="border border-[#1A237E] rounded-lg p-2 focus:outline-none shadow-lg shadow-blue-500/50 focus:ring-[#ffffff]"
         type="text"
         placeholder="Search..."
         value={searchQuery}

@@ -16,8 +16,10 @@ export default fetchFromAPI;
 export async function fetchPlanetDetails(id: string) {
   try {
     const response = await fetch(`https://swapi.dev/api/planets/${id}/`);
-    const data = await response.json();
-    return data || null;
+    if (response.ok) {
+      const data = await response.json();
+      return data || null;
+    }
   } catch (error) {
     console.error('Error fetching planet details:', error);
     return null;

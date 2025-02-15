@@ -7,7 +7,7 @@ import Header from './Header';
 import Pagination from './Pagination';
 
 export default function Main() {
-  const { loading } = useContext(FilmsContext);
+  const { loading, theme } = useContext(FilmsContext);
   const location = useLocation();
   const navigate = useNavigate();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -26,7 +26,7 @@ export default function Main() {
     <>
       <Header onClick={handleOutsideClick} />
       <main
-        className="w-full mx-auto px-4 sm:px-6 lg:px-8 p-6"
+        className={`w-full mx-auto min-h-[calc(100vh-150px)] px-4 sm:px-6 lg:px-8 p-6 ${theme === 'dark' ? 'bg-[#1a1f45]' : 'text-blue-950'}`}
         onClick={handleOutsideClick}
       >
         {loading ? (

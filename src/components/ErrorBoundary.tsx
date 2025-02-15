@@ -22,7 +22,12 @@ export default class ErrorBoundary extends Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex justify-center items-center text-red-500 h-screen">
+        <div
+          className="flex justify-center items-center text-red-500 h-screen   background: radial-gradient(#202752, #000000); "
+          style={{
+            background: 'radial-gradient(#202752, #000000)',
+          }}
+        >
           <p>
             Error Boundary testing success! Look at the console for more
             details.

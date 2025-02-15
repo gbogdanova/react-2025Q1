@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import Spinner from './Spinner';
 import { PlanetsType } from '../api/interface-api';
 import { fetchPlanetDetails } from '../api/planets-api';
+import InfContext from '../store/planets-context';
 
 export default function Details() {
+  const { theme } = useContext(InfContext);
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [planetDetail, setPlanetDetail] = useState<PlanetsType | null>(null);
@@ -30,13 +33,23 @@ export default function Details() {
 
   if (loading) return <Spinner />;
   if (!planetDetail)
-    return <p className="text-white">No planet details available.</p>;
+    return (
+      <p
+        className={
+          theme === 'dark' ? 'bg-[#1a1f45]  text-white ' : 'text-blue-950'
+        }
+      >
+        No planet details available.
+      </p>
+    );
 
   return (
-    <section className="flex flex-col gap-5 h-full p-4 border bg-gray-800 text-white relative">
+    <section
+      className={`flex flex-col gap-5 h-full p-4 border relative ${theme === 'dark' ? 'bg-[#1a1f45] text-white ' : 'text-blue-950'}`}
+    >
       <button
         onClick={() => navigate('/')}
-        className="absolute top-2 right-2 text-gray-300 hover:text-white"
+        className={`absolute top-2 right-2 text-gray-300 ${theme === 'dark' ? ' hover:text-white' : ' hover:text-[#1a1f45]'}`}
       >
         ✖ Close
       </button>

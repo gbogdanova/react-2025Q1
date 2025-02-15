@@ -8,6 +8,8 @@ export interface InfContextType {
   loading: boolean;
   page: number;
   updatePage: (newPage: number) => void;
+  theme: string;
+  setTheme: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const InfContext = createContext<InfContextType>({
@@ -17,6 +19,8 @@ const InfContext = createContext<InfContextType>({
   loading: false,
   page: 1,
   updatePage: () => {},
+  theme: 'dark',
+  setTheme: () => {},
 });
 
 export default InfContext;
