@@ -29,6 +29,8 @@ describe('Search Component', () => {
     page: 1,
     updatePage: vi.fn(),
     updateSearchState: vi.fn(),
+    theme: 'dark',
+    setTheme: vi.fn(),
   };
 
   it('saves the entered value to localStorage when clicking the Search button', () => {

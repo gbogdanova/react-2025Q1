@@ -56,6 +56,8 @@ describe('Pagination Component', () => {
           searchState: '',
           updateSearchState: vi.fn(),
           loading: false,
+          theme: 'dark',
+          setTheme: vi.fn(),
         }}
       >
         <Pagination />
