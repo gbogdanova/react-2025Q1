@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import Search from './Search';
 import ThemeBtn from './ThemeBtn';
-import InfContext from '../store/planets-context';
+import InfContext from '../context/planets-context';
 
 interface HeaderProps {
   onClick?: () => void;

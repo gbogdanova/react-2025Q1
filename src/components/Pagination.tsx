@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import InfContext from '../store/planets-context';
+import InfContext from '../context/planets-context';
 
 export default function Pagination() {
   const { page, updatePage, results } = useContext(InfContext);

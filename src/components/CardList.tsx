@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import InfContext from '../store/planets-context';
+import InfContext from '../context/planets-context';
 import Card from './Card';
 
 export default function CardList() {

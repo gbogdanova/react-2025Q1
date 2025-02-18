@@ -1,4 +1,4 @@
-import InfProvider from './store/planets-proveder';
+import InfProvider from './context/planets-proveder';
 import ErrorBoundary from './components/ErrorBoundary';
 import TestBtn from './components/TestBtn';
 import { Routes, Route } from 'react-router';

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import moon from '../assets/moon.png';
 import sun from '../assets/sun.png';
-import InfContext from '../store/planets-context';
+import InfContext from '../context/planets-context';
 
 export default function ThemeBtn() {
   const { theme, setTheme } = useContext(InfContext);

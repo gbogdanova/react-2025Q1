@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 import Spinner from './Spinner';
 import { PlanetsType } from '../api/interface-api';
 import { fetchPlanetDetails } from '../api/planets-api';
-import InfContext from '../store/planets-context';
+import InfContext from '../context/planets-context';
 
 export default function Details() {
   const { theme } = useContext(InfContext);

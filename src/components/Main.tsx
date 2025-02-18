@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
-import FilmsContext from '../store/planets-context';
+import FilmsContext from '../context/planets-context';
 import Spinner from './Spinner';
 import CardList from './CardList';
 import Header from './Header';
