@@ -27,7 +27,6 @@ export default function Main() {
       <Header onClick={handleOutsideClick} />
       <main
         className={`w-full mx-auto min-h-[calc(100vh-150px)] px-4 sm:px-6 lg:px-8 p-6 ${theme === 'dark' ? 'bg-[#1a1f45]' : 'text-blue-950'}`}
-        onClick={handleOutsideClick}
       >
         {loading ? (
           <Spinner />
@@ -40,7 +39,7 @@ export default function Main() {
               </div>
 
               {isDetailsOpen && (
-                <div className="w-1/2" onClick={(e) => e.stopPropagation()}>
+                <div className="w-1/2">
                   <Outlet />
                 </div>
               )}
