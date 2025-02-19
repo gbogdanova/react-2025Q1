@@ -5,12 +5,19 @@ import Spinner from './Spinner';
 import CardList from './CardList';
 import Header from './Header';
 import Pagination from './Pagination';
+import Floyout from './Flyout';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 export default function Main() {
   const { loading, theme } = useContext(FilmsContext);
   const location = useLocation();
   const navigate = useNavigate();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
+  const hasSelectedItems = useSelector(
+    (state: RootState) => state.selectedItems.selectedItems
+  );
 
   useEffect(() => {
     setIsDetailsOpen(location.pathname.startsWith('/details/'));
@@ -44,6 +51,7 @@ export default function Main() {
                 </div>
               )}
             </div>
+            {hasSelectedItems.length > 0 && <Floyout />}
           </>
         )}
       </main>
