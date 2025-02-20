@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { useParams, useNavigate } from 'react-router';
+import { useGetPlanetDetailsQuery } from '../api/planets-api';
 import Spinner from './Spinner';
-import { PlanetsType } from '../api/interface-api';
-import { fetchPlanetDetails } from '../api/planets-api';
 import InfContext from '../context/planets-context';
 
 export default function Details() {
@@ -10,29 +9,15 @@ export default function Details() {
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const [planetDetail, setPlanetDetail] = useState<PlanetsType | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        if (id) {
-          setLoading(true);
-          const result = await fetchPlanetDetails(id);
-          setPlanetDetail(result);
-        }
-      } catch (error) {
-        console.error('Error fetching planet details:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const {
+    data: planetDetail,
+    isLoading,
+    isError,
+  } = useGetPlanetDetailsQuery(id || '');
 
-    fetch();
-  }, [id]);
-
-  if (loading) return <Spinner />;
-  if (!planetDetail)
+  if (isLoading) return <Spinner />;
+  if (isError || !planetDetail) {
     return (
       <p
         className={
@@ -42,6 +27,7 @@ export default function Details() {
         No planet details available.
       </p>
     );
+  }
 
   return (
     <section
@@ -56,7 +42,8 @@ export default function Details() {
       <h2 className="text-4xl font-bold mb-2 font-[Orbitron] text-amber-300">
         {planetDetail.name}
       </h2>
-      {/* <div className="flex py-6 justify-center items-center">
+      {/* For case when images will be returned
+      <div className="flex py-6 justify-center items-center">
         <img
           className="object-center"
           src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg`}

@@ -1,27 +1,28 @@
-const fetchFromAPI = async (searchState: string, page: number) => {
-  try {
-    const response = await fetch(
-      `https://swapi.dev/api/planets?search=${searchState}&page=${page}`
-    );
-    const data = await response.json();
-    return data.results || [];
-  } catch (error) {
-    console.error(error);
-    return `Oops! Something went wrong while fetching the planets.`;
-  }
-};
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { PlanetsType } from './interface-api';
 
-export default fetchFromAPI;
+export const planetsApi = createApi({
+  reducerPath: 'planetsApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'https://swapi.dev/api/',
+  }),
+  endpoints: (builder) => ({
+    getPlanets: builder.query<
+      {
+        results: PlanetsType[];
+        next: string | null;
+      },
+      { searchState: string; page: number }
+    >({
+      query: ({ searchState, page }) => ({
+        url: 'planets',
+        params: { search: searchState, page: String(page) },
+      }),
+    }),
+    getPlanetDetails: builder.query<PlanetsType, string>({
+      query: (id) => `planets/${id}/`,
+    }),
+  }),
+});
 
-export async function fetchPlanetDetails(id: string) {
-  try {
-    const response = await fetch(`https://swapi.dev/api/planets/${id}/`);
-    if (response.ok) {
-      const data = await response.json();
-      return data || null;
-    }
-  } catch (error) {
-    console.error('Error fetching planet details:', error);
-    return null;
-  }
-}
+export const { useGetPlanetsQuery, useGetPlanetDetailsQuery } = planetsApi;

@@ -1,6 +1,5 @@
-import { ReactNode, useState, useEffect } from 'react';
-import fetchFromAPI from '../api/planets-api';
-import { PlanetsType } from '../api/interface-api';
+import { ReactNode, useState } from 'react';
+import { useGetPlanetsQuery } from '../api/planets-api';
 import InfContext from './planets-context';
 import { useSearchParams } from 'react-router';
 
@@ -15,10 +14,10 @@ export default function InfProvider({ children }: PlanetsProviderProps) {
   const initialPage = Number(searchParams.get('page')) || 1;
 
   const [searchState, setSearchState] = useState<string>(initialSearch);
-  const [results, setResults] = useState<PlanetsType[] | string>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(initialPage);
   const [theme, setTheme] = useState<string>('dark');
+
+  const { data, isLoading } = useGetPlanetsQuery({ searchState, page });
 
   const updateSearchState = (search: string) => {
     setSearchState(search);
@@ -39,29 +38,13 @@ export default function InfProvider({ children }: PlanetsProviderProps) {
     setSearchParams(params);
   };
 
-  useEffect(() => {
-    const fetch = async () => {
-      setLoading(true);
-      try {
-        const fetchedResults = await fetchFromAPI(searchState, page);
-        setResults(fetchedResults);
-      } catch (error) {
-        console.error('Error fetching films:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetch();
-  }, [searchState, page]);
-
   return (
     <InfContext.Provider
       value={{
         searchState,
         updateSearchState,
-        results,
-        loading,
+        results: data?.results || [],
+        loading: isLoading,
         page,
         updatePage,
         theme,

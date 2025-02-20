@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
-import FilmsContext from '../context/planets-context';
+import InfContext from '../context/planets-context';
 import Spinner from './Spinner';
 import CardList from './CardList';
 import Header from './Header';
@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
 export default function Main() {
-  const { loading, theme } = useContext(FilmsContext);
+  const { loading, theme } = useContext(InfContext);
   const location = useLocation();
   const navigate = useNavigate();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
