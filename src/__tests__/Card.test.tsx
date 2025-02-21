@@ -1,9 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
+import { server } from '../mocks/node';
 import Card from '../components/Card';
-import { PlanetsType } from '../api/interface-api';
 
-const mockPlanet: PlanetsType = {
+const mockPlanet = {
   climate: 'temperate',
   created: '2014-12-10T11:35:48.479000Z',
   diameter: '12500',
@@ -24,13 +26,27 @@ const mockPlanet: PlanetsType = {
   url: 'https://swapi.dev/api/planets/2/',
 };
 
-test('renders relevant card data', () => {
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+test('renders relevant card data', async () => {
   render(
-    <MemoryRouter>
-      <Card planet={mockPlanet} />
-    </MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter>
+        <Card planet={mockPlanet} />
+      </MemoryRouter>
+    </Provider>
   );
 
-  expect(screen.getByText(/Alderaan/i)).toBeInTheDocument();
-  expect(screen.getByText(/24/i)).toBeInTheDocument();
+  await waitFor(() => screen.getByText(/Alderaan/i));
+
+  expect(screen.getByText(/Rotation Period:/i)).toBeInTheDocument();
+  expect(screen.getByText('24')).toBeInTheDocument();
+  expect(screen.getByText(/Climate:/i)).toBeInTheDocument();
+  expect(screen.getByText('temperate')).toBeInTheDocument();
+  expect(screen.getByText(/Gravity:/i)).toBeInTheDocument();
+  expect(screen.getByText('1 standard')).toBeInTheDocument();
+  expect(screen.getByText(/Population:/i)).toBeInTheDocument();
+  expect(screen.getByText('2000000000')).toBeInTheDocument();
 });
