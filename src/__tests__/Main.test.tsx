@@ -3,9 +3,9 @@ import { MemoryRouter } from 'react-router';
 import InfContext from '../context/planets-context';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
-import Main from '../components/Main';
+import Main from '../pages';
 import { BrowserRouter } from 'react-router';
-import App from '../App';
+import App from '../pages/_app';
 import { vi } from 'vitest';
 
 vi.mock('../components/Spinner', () => ({

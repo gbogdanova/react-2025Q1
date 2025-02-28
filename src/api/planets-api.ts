@@ -12,11 +12,11 @@ export const planetsApi = createApi({
         results: PlanetsType[];
         next: string | null;
       },
-      { searchState: string; page: number }
+      { searchState: string } //; page: number  , page
     >({
-      query: ({ searchState, page }) => ({
+      query: ({ searchState }) => ({
         url: 'planets',
-        params: { search: searchState, page: String(page) },
+        params: { search: searchState }, //, page: String(page)
       }),
     }),
     getPlanetDetails: builder.query<PlanetsType, string>({

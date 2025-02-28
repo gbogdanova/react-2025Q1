@@ -3,7 +3,7 @@ import { MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
 import { server } from '../mocks/node';
-import Details from '../components/Details';
+import Details from '../pages/details/[id]';
 
 beforeAll(() => server.listen());
 

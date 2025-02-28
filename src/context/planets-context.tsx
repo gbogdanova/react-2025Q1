@@ -6,18 +6,18 @@ export interface InfContextType {
   updateSearchState: (search: string) => void;
   results: PlanetsType[] | string;
   loading: boolean;
-  page: number;
+  // page: number;
   updatePage: (newPage: number) => void;
   theme: string;
   setTheme: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const InfContext = createContext<InfContextType>({
-  searchState: localStorage.getItem('searchState') || '',
+  searchState: '',
   updateSearchState: () => {},
   results: [],
   loading: false,
-  page: 1,
+  //page: 1,
   updatePage: () => {},
   theme: 'dark',
   setTheme: () => {},

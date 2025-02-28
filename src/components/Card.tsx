@@ -1,14 +1,16 @@
-import { Link } from 'react-router';
+//import Link from 'next/link';
 import { PlanetsType } from '../api/interface-api';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import { toggleItems } from '../redux/selectedItemsSlice';
+import { useRouter } from 'next/router';
 
 interface CardProps {
   planet: PlanetsType;
 }
 
 export default function Card({ planet }: CardProps) {
+  const router = useRouter();
   const selectedItems = useSelector(
     (state: RootState) => state.selectedItems.selectedItems
   );
@@ -20,8 +22,11 @@ export default function Card({ planet }: CardProps) {
   const planetId = planet.url.split('/')[5];
 
   return (
-    <li className="flex gap-5 border-1 border-cover p-2">
-      <Link to={`/details/${planetId}`} className="flex w-full">
+    <li
+      className="flex gap-5 border-1 border-cover p-2"
+      onClick={() => router.push(`/details/${planetId}`)}
+    >
+      <div className="flex w-full">
         <div>
           <input
             type="checkbox"
@@ -44,7 +49,7 @@ export default function Card({ planet }: CardProps) {
             {planet.population}
           </div>
         </div>
-      </Link>
+      </div>
     </li>
   );
 }
