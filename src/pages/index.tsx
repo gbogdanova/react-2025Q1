@@ -1,65 +1,99 @@
-import { useContext, useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import InfContext from '../context/planets-context';
-import Spinner from '../components/Spinner';
-import CardList from '../components/CardList';
-import Header from '../components/Header';
-import Pagination from '../components/Pagination';
-import Flyout from '../components/Flyout';
-import Details from './details/[id]'; // Import the Details component
+import { useState, FormEvent } from 'react';
+import Link from 'next/link';
+import { fetchCharacters } from '../api/planets-api';
 
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+// Define the type for a character
+interface Character {
+  id: number;
+  name: string;
+  image: string;
+}
 
-export default function MainPage() {
-  const { loading, theme } = useContext(InfContext);
+// Define the type for page props
+interface CharactersPageProps {
+  characters: Character[];
+  nextPage: number | null;
+  prevPage: number | null;
+  currentPage: number;
+  searchQuery: string;
+}
+
+export const getServerSideProps: GetServerSideProps<
+  CharactersPageProps
+> = async (context) => {
+  const page = Number(context.query.page) || 1;
+  const searchQuery = context.query.search ? String(context.query.search) : '';
+
+  const { results, next, prev } = await fetchCharacters(page, searchQuery);
+
+  return {
+    props: {
+      characters: results,
+      nextPage: next ? page + 1 : null,
+      prevPage: prev ? page - 1 : null,
+      currentPage: page,
+      searchQuery,
+    },
+  };
+};
+
+export default function CharactersPage({
+  characters,
+  nextPage,
+  prevPage,
+  currentPage,
+  searchQuery,
+}: CharactersPageProps) {
   const router = useRouter();
-  const { id } = router.query;
-  const hasSelectedItems = useSelector(
-    (state: RootState) => state.selectedItems.selectedItems
-  );
+  const [search, setSearch] = useState<string>(searchQuery);
 
-  // Detect if Details component should be shown
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-
-  useEffect(() => {
-    setIsDetailsOpen(!!id); // Show details if an ID exists in the URL
-  }, [id]);
-
-  // Close details when clicking outside
-  const handleOutsideClick = () => {
-    if (isDetailsOpen) {
-      router.push('/'); // Navigate back to the main page
-    }
+  // Handle search submission
+  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (search.trim() === searchQuery) return; // Avoid unnecessary reload
+    router.push(`/?page=1&search=${encodeURIComponent(search)}`);
   };
 
   return (
-    <>
-      <Header onClick={handleOutsideClick} />
-      <main
-        className={`w-full mx-auto min-h-[calc(100vh-150px)] px-4 sm:px-6 lg:px-8 p-6 ${theme === 'dark' ? 'bg-[#1a1f45]' : 'text-blue-950'}`}
-      >
-        {loading ? (
-          <Spinner />
-        ) : (
-          <>
-            <Pagination />
-            <div className="flex gap-4">
-              <div className={isDetailsOpen ? 'w-1/2' : 'w-full'}>
-                <CardList />
-              </div>
+    <main>
+      <h1>Rick and Morty Characters</h1>
+      <form onSubmit={handleSearch}>
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search characters..."
+        />
+        <button type="submit">Search</button>
+      </form>
+      <ul>
+        {characters.map((char) => (
+          <li key={char.id}>
+            <img src={char.image} alt={char.name} width={50} height={50} />
+            {char.name}
+          </li>
+        ))}
+      </ul>
 
-              {/* Show Details component when URL includes /details/:id */}
-              {isDetailsOpen && (
-                <div className="w-1/2">
-                  <Details />
-                </div>
-              )}
-            </div>
-            {hasSelectedItems.length > 0 && <Flyout />}
-          </>
+      <div>
+        {prevPage && (
+          <Link
+            href={`/?page=${prevPage}&search=${encodeURIComponent(searchQuery)}`}
+          >
+            Previous
+          </Link>
         )}
-      </main>
-    </>
+        {currentPage}
+        {nextPage && (
+          <Link
+            href={`/?page=${nextPage}&search=${encodeURIComponent(searchQuery)}`}
+          >
+            Next
+          </Link>
+        )}
+      </div>
+    </main>
   );
 }
