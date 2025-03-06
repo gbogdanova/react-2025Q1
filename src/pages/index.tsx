@@ -1,17 +1,18 @@
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useState, FormEvent } from 'react';
-import Link from 'next/link';
 import { fetchCharacters } from '../api/planets-api';
+import Header from '../components/Header';
+import Pagination from '../components/Pagination';
+import { useEffect, useState, useContext } from 'react';
+import Spinner from '../components/Spinner';
+import { Character } from '../api/interface-api';
+import CardList from '../components/CardList';
+import Details from '../components/Details';
+import InfContext from '../context/theme-context';
+import Floyout from '../components/Flyout';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
-// Define the type for a character
-interface Character {
-  id: number;
-  name: string;
-  image: string;
-}
-
-// Define the type for page props
 interface CharactersPageProps {
   characters: Character[];
   nextPage: number | null;
@@ -47,53 +48,93 @@ export default function CharactersPage({
   searchQuery,
 }: CharactersPageProps) {
   const router = useRouter();
-  const [search, setSearch] = useState<string>(searchQuery);
+  const { theme } = useContext(InfContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDetailLoading, setIsDetailLoading] = useState(false);
 
-  // Handle search submission
-  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (search.trim() === searchQuery) return; // Avoid unnecessary reload
-    router.push(`/?page=1&search=${encodeURIComponent(search)}`);
+  const hasSelectedItems = useSelector(
+    (state: RootState) => state.selectedItems.selectedItems
+  );
+
+  useEffect(() => {
+    const handleStart = () => setIsLoading(true);
+    const handleComplete = () => setIsLoading(false);
+
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleComplete);
+    router.events.on('routeChangeError', handleComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleComplete);
+      router.events.off('routeChangeError', handleComplete);
+    };
+  }, [router]);
+
+  const selectedCharacterId = router.query.details
+    ? Number(router.query.details)
+    : null;
+
+  const selectedCharacter = characters.find(
+    (char) => char.id === selectedCharacterId
+  );
+
+  useEffect(() => {
+    if (selectedCharacterId) {
+      setIsDetailLoading(true);
+      setTimeout(() => setIsDetailLoading(false), 300);
+    }
+  }, [selectedCharacterId]);
+
+  const handleSearch = (searchTerm: string) => {
+    router.push(`/?page=1&search=${encodeURIComponent(searchTerm)}`);
+  };
+
+  const handleItemClick = (id: number) => {
+    setIsDetailLoading(true);
+    router.push(
+      `/?page=${currentPage}&search=${encodeURIComponent(searchQuery)}&details=${id}`,
+      undefined,
+      { shallow: true }
+    );
   };
 
   return (
-    <main>
-      <h1>Rick and Morty Characters</h1>
-      <form onSubmit={handleSearch}>
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search characters..."
-        />
-        <button type="submit">Search</button>
-      </form>
-      <ul>
-        {characters.map((char) => (
-          <li key={char.id}>
-            <img src={char.image} alt={char.name} width={50} height={50} />
-            {char.name}
-          </li>
-        ))}
-      </ul>
+    <>
+      <Header searchQuery={searchQuery} onSearch={handleSearch} />
+      <main
+        className={`w-full mx-auto min-h-[calc(100vh-150px)] px-4 sm:px-6 lg:px-8 p-6 ${theme === 'dark' ? 'bg-[#1a1f45]' : 'text-blue-950'} `}
+      >
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            <Pagination
+              prevPage={prevPage}
+              nextPage={nextPage}
+              searchQuery={searchQuery}
+              currentPage={currentPage}
+            />
+            <div className="flex gap-4">
+              <div className={selectedCharacterId ? 'w-1/2' : 'w-full'}>
+                <CardList
+                  characters={characters}
+                  onItemClick={handleItemClick}
+                />
+              </div>
 
-      <div>
-        {prevPage && (
-          <Link
-            href={`/?page=${prevPage}&search=${encodeURIComponent(searchQuery)}`}
-          >
-            Previous
-          </Link>
+              {/* Right Section - Details View */}
+              {selectedCharacterId && (
+                <Details
+                  selectedCharacter={selectedCharacter}
+                  isDetailLoading={isDetailLoading}
+                />
+              )}
+            </div>
+            {hasSelectedItems.length > 0 && <Floyout />}
+          </>
         )}
-        {currentPage}
-        {nextPage && (
-          <Link
-            href={`/?page=${nextPage}&search=${encodeURIComponent(searchQuery)}`}
-          >
-            Next
-          </Link>
-        )}
-      </div>
-    </main>
+      </main>
+    </>
   );
 }

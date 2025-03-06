@@ -1,20 +1,19 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-// import InfProvider from '../context/planets-proveder';
 import ErrorBoundary from '../components/ErrorBoundary';
 import TestBtn from '../components/TestBtn';
-// import { Provider } from 'react-redux';
-// import { store } from '../redux/store';
+import InfProvider from '../context/theme-provider';
+import { wrapper } from '../redux/store';
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ErrorBoundary>
-      {/* <Provider store={store}>
-        <InfProvider> */}
-      <Component {...pageProps} />
-      <TestBtn />
-      {/* </InfProvider>
-      </Provider> */}
+      <InfProvider>
+        <Component {...pageProps} />
+        <TestBtn />
+      </InfProvider>
     </ErrorBoundary>
   );
 }
+
+export default wrapper.withRedux(MyApp);

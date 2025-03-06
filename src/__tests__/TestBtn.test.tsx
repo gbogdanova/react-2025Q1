@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { useState } from 'react';
-import InfContext from '../context/planets-context';
+import InfContext from '../context/';
 import { BrowserRouter } from 'react-router';
 import TestBtn from '../components/TestBtn';
 

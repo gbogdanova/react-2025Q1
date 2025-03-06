@@ -1,16 +1,11 @@
-export interface PlanetsType {
-  climate: string;
-  created: string;
-  diameter: string;
-  edited: string;
-  films: string[];
-  gravity: string;
+export interface Character {
+  id: number;
   name: string;
-  orbital_period: string;
-  population: string;
-  residents: string[];
-  rotation_period: string;
-  surface_water: string;
-  terrain: string;
+  status: string;
+  species: string;
+  type: string;
+  gender: string;
+  image: string;
   url: string;
+  created: string;
 }

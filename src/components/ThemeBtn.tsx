@@ -1,13 +1,11 @@
 import { useContext } from 'react';
-// import moon from '../../public/assets/moon.png';
-// import sun from '../../public/assets/sun.png';
-import InfContext from '../context/planets-context';
+import InfContext from '../context/theme-context';
 
 export default function ThemeBtn() {
   const { theme, setTheme } = useContext(InfContext);
 
   const handleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
+    setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
   return (

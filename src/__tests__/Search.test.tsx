@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
 import Search from '../components/Search';
-import FilmsContext from '../context/planets-context';
+import FilmsContext from '../context/';
 
 describe('Search Component', () => {
   beforeEach(() => {

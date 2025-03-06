@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import InfContext from '../context/planets-context';
+import InfContext from '../context/';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
 import Main from '../pages';

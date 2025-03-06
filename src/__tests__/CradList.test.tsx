@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import InfContext from '../context/planets-context';
+import InfContext from '../context/';
 import { vi } from 'vitest';
 import CardList from '../components/CardList';
 import { Provider } from 'react-redux';
