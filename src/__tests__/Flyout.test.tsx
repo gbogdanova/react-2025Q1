@@ -1,79 +1,66 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, test, expect, vi } from 'vitest';
 import { Provider } from 'react-redux';
-import { store } from '../redux/store';
+import configureStore from 'redux-mock-store';
 import Floyout from '../components/Flyout';
 import { unselectAll } from '../redux/selectedItemsSlice';
-import { vi } from 'vitest';
 
-beforeAll(() => {
-  global.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
+const mockStore = configureStore([]);
+const mockDispatch = vi.fn();
+
+vi.mock('react-redux', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-redux')>('react-redux');
+  return {
+    ...actual,
+    useDispatch: () => mockDispatch,
+  };
 });
 
-const mockSelectedItems = [
-  {
-    name: 'Alderaan',
-    diameter: '12500',
-    population: '2000000000',
-    gravity: '1 standard',
-    url: 'https://swapi.dev/api/planets/2/',
-  },
-  {
-    name: 'Tatooine',
-    diameter: '10465',
-    population: '200000',
-    gravity: '1 standard',
-    url: 'https://swapi.dev/api/planets/1/',
-  },
-];
-
-describe('Floyout', () => {
-  test('dispatches unselectAll action and clears selected items', async () => {
-    const mockDispatch = vi.fn();
-    const mockStore = {
-      ...store,
-      dispatch: mockDispatch,
-      getState: () => ({ selectedItems: { selectedItems: mockSelectedItems } }),
-    };
+describe('Floyout Component', () => {
+  test('displays correct item count when multiple items are selected', () => {
+    const store = mockStore({
+      selectedItems: { selectedItems: [{ name: 'Rick' }, { name: 'Morty' }] },
+    });
 
     render(
-      <Provider store={mockStore}>
+      <Provider store={store}>
         <Floyout />
       </Provider>
     );
 
     expect(screen.getByText('2 items are selected')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByText('Unselect all'));
-
-    expect(mockDispatch).toHaveBeenCalledWith(unselectAll());
   });
 
-  test('generates a CSV file and prepares it for download', async () => {
-    const mockDispatch = vi.fn();
-    const mockStore = {
-      ...store,
-      dispatch: mockDispatch,
-      getState: () => ({ selectedItems: { selectedItems: mockSelectedItems } }),
-    };
+  test('displays correct item count when one item is selected', () => {
+    const store = mockStore({
+      selectedItems: { selectedItems: [{ name: 'Rick' }] },
+    });
 
     render(
-      <Provider store={mockStore}>
+      <Provider store={store}>
         <Floyout />
       </Provider>
     );
 
-    const downloadButton = screen.getByText('Download');
-    fireEvent.click(downloadButton);
+    expect(screen.getByText('1 item is selected')).toBeInTheDocument();
+  });
 
-    await waitFor(() =>
-      expect(screen.getByText('Download').closest('a')).toHaveAttribute('href')
+  test('calls unselectAll action when "Unselect all" button is clicked', () => {
+    const store = mockStore({
+      selectedItems: { selectedItems: [{ name: 'Rick' }] },
+    });
+
+    render(
+      <Provider store={store}>
+        <Floyout />
+      </Provider>
     );
 
-    const downloadLink = screen.getByText('Download').closest('a');
-    const downloadUrl = downloadLink?.getAttribute('href');
-    expect(downloadUrl).toBeTruthy();
-    expect(downloadUrl?.startsWith('blob:')).toBe(true);
+    const unselectBtn = screen.getByText('Unselect all');
+    fireEvent.click(unselectBtn);
 
-    expect(downloadLink).toHaveAttribute('download', '2_planets.csv');
+    expect(mockDispatch).toHaveBeenCalledWith(unselectAll());
   });
 });

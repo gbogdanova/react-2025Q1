@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useContext } from 'react';
 import ThemeBtn from './ThemeBtn';
 import InfContext from '../context/theme-context';

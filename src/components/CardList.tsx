@@ -1,3 +1,4 @@
+import React from 'react';
 import { Character } from '../api/interface-api';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';

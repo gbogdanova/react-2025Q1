@@ -1,3 +1,4 @@
+import React from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { fetchCharacters } from '../api/planets-api';

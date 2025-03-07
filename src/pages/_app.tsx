@@ -5,7 +5,7 @@ import TestBtn from '../components/TestBtn';
 import InfProvider from '../context/theme-provider';
 import { wrapper } from '../redux/store';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
     <ErrorBoundary>
       <InfProvider>
@@ -16,4 +16,5 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default wrapper.withRedux(MyApp);
+const WrappedApp = wrapper.withRedux(App);
+export default WrappedApp;
