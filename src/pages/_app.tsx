@@ -4,17 +4,20 @@ import ErrorBoundary from '../components/ErrorBoundary';
 import TestBtn from '../components/TestBtn';
 import InfProvider from '../context/theme-provider';
 import { wrapper } from '../redux/store';
+import { Provider } from 'react-redux';
 
-function App({ Component, pageProps }: AppProps) {
+function MyApp({ Component, ...rest }: AppProps) {
+  const { store, props } = wrapper.useWrappedStore(rest);
   return (
-    <ErrorBoundary>
-      <InfProvider>
-        <Component {...pageProps} />
-        <TestBtn />
-      </InfProvider>
-    </ErrorBoundary>
+    <Provider store={store}>
+      <ErrorBoundary>
+        <InfProvider>
+          <Component {...props.pageProps} />
+          <TestBtn />
+        </InfProvider>
+      </ErrorBoundary>
+    </Provider>
   );
 }
 
-const WrappedApp = wrapper.withRedux(App);
-export default WrappedApp;
+export default MyApp;
