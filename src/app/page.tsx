@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
 import { useState, useEffect, useContext } from 'react';
 import Header from '../components/Header';
 import { fetchCharacters } from '../api/planets-api';
@@ -72,47 +71,45 @@ export default function HomePage() {
 
   return (
     <ErrorBoundary>
-      <Suspense>
-        <Header />
-        <main
-          className={`w-full mx-auto min-h-[calc(100vh-150px)] px-4 sm:px-6 lg:px-8 p-6 ${theme === 'dark' ? 'bg-[#1a1f45]' : 'text-blue-950'} `}
-        >
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            <>
-              {characters.length === 0 ? (
-                <p>No results found for your search.</p>
-              ) : (
-                <>
-                  <Pagination
-                    prevPage={prevPage}
-                    nextPage={nextPage}
-                    currentPage={page}
-                    onPageChange={handlePageChange}
-                  />
-                  <div className="flex gap-4">
-                    <div className={selectedCharacter ? 'w-1/2' : 'w-full'}>
-                      <CardList
-                        characters={characters}
-                        onItemClick={handleItemClick}
-                      />
-                    </div>
-                    {selectedCharacter && (
-                      <Details
-                        selectedCharacter={selectedCharacter}
-                        isDetailLoading={isLoading}
-                      />
-                    )}
+      <Header />
+      <main
+        className={`w-full mx-auto min-h-[calc(100vh-150px)] px-4 sm:px-6 lg:px-8 p-6 ${theme === 'dark' ? 'bg-[#1a1f45]' : 'text-blue-950'} `}
+      >
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            {characters.length === 0 ? (
+              <p>No results found for your search.</p>
+            ) : (
+              <>
+                <Pagination
+                  prevPage={prevPage}
+                  nextPage={nextPage}
+                  currentPage={page}
+                  onPageChange={handlePageChange}
+                />
+                <div className="flex gap-4">
+                  <div className={selectedCharacter ? 'w-1/2' : 'w-full'}>
+                    <CardList
+                      characters={characters}
+                      onItemClick={handleItemClick}
+                    />
                   </div>
-                  {selectedItems.length > 0 && <Floyout />}
-                </>
-              )}
-            </>
-          )}
-        </main>
-        <TestBtn />
-      </Suspense>
+                  {selectedCharacter && (
+                    <Details
+                      selectedCharacter={selectedCharacter}
+                      isDetailLoading={isLoading}
+                    />
+                  )}
+                </div>
+                {selectedItems.length > 0 && <Floyout />}
+              </>
+            )}
+          </>
+        )}
+      </main>
+      <TestBtn />
     </ErrorBoundary>
   );
 }

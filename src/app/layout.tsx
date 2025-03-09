@@ -1,6 +1,6 @@
 import InfProvider from '../context/theme-provider';
 import '../styles/globals.css';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import ReduxProvider from '../components/ReduxProvider';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -9,7 +9,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <ReduxProvider>
           <InfProvider>
-            <main>{children}</main>
+            <Suspense>
+              <main>{children}</main>
+            </Suspense>
           </InfProvider>
         </ReduxProvider>
       </body>
