@@ -1,18 +1,17 @@
 import React from 'react';
-import Link from 'next/link';
 
 interface PaginationProps {
-  prevPage: number | null;
-  nextPage: number | null;
   currentPage: number;
-  searchQuery: string;
+  nextPage: string | null;
+  prevPage: string | null;
+  onPageChange: (newPage: number) => void;
 }
 
 export default function Pagination({
   prevPage,
   nextPage,
-  searchQuery,
   currentPage,
+  onPageChange,
 }: PaginationProps) {
   const btnClass =
     'text-2xl cursor-pointer disabled:text-gray-500 disabled:cursor-default';
@@ -20,21 +19,21 @@ export default function Pagination({
   return (
     <div className="my-3 flex gap-4 justify-center">
       {prevPage && (
-        <Link
-          href={`/?page=${prevPage}&search=${encodeURIComponent(searchQuery)}`}
+        <button
+          onClick={() => onPageChange(currentPage - 1)}
           className={btnClass}
         >
           ←
-        </Link>
+        </button>
       )}
       <span className="text-xl">{currentPage}</span>
       {nextPage && (
-        <Link
-          href={`/?page=${nextPage}&search=${encodeURIComponent(searchQuery)}`}
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
           className={btnClass}
         >
           →
-        </Link>
+        </button>
       )}
     </div>
   );
