@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { useContext } from 'react';
 import InfContext from '../context/theme-context';

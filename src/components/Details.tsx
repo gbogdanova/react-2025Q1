@@ -1,8 +1,7 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import { useContext } from 'react';
-import Spinner from './Spinner';
 import { Character } from '../api/interface-api';
+import Spinner from './Spinner';
+import { useContext } from 'react';
 import InfContext from '../context/theme-context';
 
 interface DetailsProps {
@@ -15,13 +14,12 @@ export default function Details({
   isDetailLoading,
 }: DetailsProps) {
   const { theme } = useContext(InfContext);
-  const router = useRouter();
 
+  // Close button function to reset the 'details' URL parameter
   const handleClose = () => {
-    const { page, search } = router.query;
-    router.push(`/?page=${page || 1}&search=${search || ''}`, undefined, {
-      shallow: true,
-    });
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.delete('details'); // Remove the 'details' query param to close the details view
+    window.history.pushState({}, '', newUrl.toString());
   };
 
   if (isDetailLoading) {
