@@ -1,5 +1,6 @@
+import React from 'react';
 import { useContext, useState } from 'react';
-import InfContext from '../context/planets-context';
+import InfContext from '../context/theme-context';
 
 export default function TestBtn() {
   const { theme } = useContext(InfContext);

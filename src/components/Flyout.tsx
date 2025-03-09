@@ -1,7 +1,8 @@
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import { unselectAll } from '../redux/selectedItemsSlice';
-import { PlanetsType } from '../api/interface-api';
+import { Character } from '../api/interface-api';
 import { useState } from 'react';
 
 export default function Floyout() {
@@ -14,18 +15,18 @@ export default function Floyout() {
 
   const handleDowload = () => {
     const csvData =
-      '"Name","Diameter","Population","Gravity","Url"\n' +
+      '"Name","Status","Species","Gender","Image"\n' +
       selectedItems
         .map(
-          (planet: PlanetsType) =>
-            `${planet.name},${planet.diameter},${planet.population},${planet.gravity},${planet.url}`
+          (char: Character) =>
+            `${char.name},${char.status},${char.species},${char.gender},${char.image}`
         )
         .join('\n');
 
     const blob = new Blob([csvData], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     setDownloadUrl(url);
-    setFileName(`${selectedItems.length}_planets.csv`);
+    setFileName(`${selectedItems.length}_characters.csv`);
   };
 
   const caption =

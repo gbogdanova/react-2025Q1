@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PlanetsType } from '../api/interface-api';
+import { Character } from '../api/interface-api';
 
 interface SelectedItemsState {
-  selectedItems: PlanetsType[];
+  selectedItems: Character[];
 }
 
 const initialState: SelectedItemsState = { selectedItems: [] };
@@ -11,7 +11,7 @@ const selectedItemsSlice = createSlice({
   name: 'selectedItems',
   initialState,
   reducers: {
-    toggleItems: (state, action: PayloadAction<PlanetsType>) => {
+    toggleItems: (state, action: PayloadAction<Character>) => {
       const index = state.selectedItems.findIndex(
         (item) => item.url === action.payload.url
       );

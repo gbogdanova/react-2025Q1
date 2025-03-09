@@ -1,9 +1,8 @@
 import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  plugins: [tailwindcss(), react()],
+  plugins: [tailwindcss()],
   test: {
     globals: true,
     environment: 'jsdom',
@@ -26,3 +25,5 @@ export default defineConfig({
     },
   },
 });
+
+process.env.NEXT_PUBLIC_DISABLE_ERROR_OVERLAY = 'true';

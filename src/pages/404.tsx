@@ -1,5 +1,6 @@
+import React from 'react';
 import { useContext } from 'react';
-import InfContext from '../context/planets-context';
+import InfContext from '../context/theme-context';
 
 export default function NotFound() {
   const { theme } = useContext(InfContext);

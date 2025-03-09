@@ -1,73 +1,74 @@
+import React from 'react';
+import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import { useParams, useNavigate } from 'react-router';
-import { useGetPlanetDetailsQuery } from '../api/planets-api';
 import Spinner from './Spinner';
-import InfContext from '../context/planets-context';
+import { Character } from '../api/interface-api';
+import InfContext from '../context/theme-context';
 
-export default function Details() {
+interface DetailsProps {
+  selectedCharacter: Character | undefined;
+  isDetailLoading: boolean;
+}
+
+export default function Details({
+  selectedCharacter,
+  isDetailLoading,
+}: DetailsProps) {
   const { theme } = useContext(InfContext);
+  const router = useRouter();
 
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const handleClose = () => {
+    const { page, search } = router.query;
+    router.push(`/?page=${page || 1}&search=${search || ''}`, undefined, {
+      shallow: true,
+    });
+  };
 
-  const {
-    data: planetDetail,
-    isLoading,
-    isError,
-  } = useGetPlanetDetailsQuery(id || '');
+  if (isDetailLoading) {
+    return (
+      <div className="w-1/2">
+        <Spinner />
+      </div>
+    );
+  }
 
-  if (isLoading) return <Spinner />;
-  if (isError || !planetDetail) {
+  if (!selectedCharacter) {
     return (
       <p
         className={
           theme === 'dark' ? 'bg-[#1a1f45]  text-white ' : 'text-blue-950'
         }
       >
-        No planet details available.
+        Select a character to see details.
       </p>
     );
   }
 
   return (
     <section
-      className={`flex flex-col gap-5 h-full p-4 border relative ${theme === 'dark' ? 'bg-[#1a1f45] text-white ' : 'text-blue-950'}`}
+      className={`flex flex-col gap-5 h-full p-4 border relative w-1/2 ${theme === 'dark' ? 'bg-[#1a1f45] text-white ' : 'text-blue-950'}`}
     >
       <button
-        onClick={() => navigate('/')}
-        className={`absolute top-2 right-2 text-gray-300 ${theme === 'dark' ? ' hover:text-white' : ' hover:text-[#1a1f45]'}`}
+        onClick={handleClose}
+        className={`absolute top-2 right-2 text-gray-300 cursor-pointer ${theme === 'dark' ? ' hover:text-white' : ' hover:text-[#1a1f45]'}`}
       >
         ✖ Close
       </button>
-      <h2 className="text-4xl font-bold mb-2 font-[Orbitron] text-amber-300">
-        {planetDetail.name}
-      </h2>
-      {/* For case when images will be returned
-      <div className="flex py-6 justify-center items-center">
-        <img
-          className="object-center"
-          src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg`}
-          onError={({ currentTarget }) => {
-            currentTarget.onerror = null;
-            currentTarget.src =
-              'https://starwars-visualguide.com/assets/img/big-placeholder.jpg';
-          }}
-          alt={planetDetail.name}
-        />
-      </div> */}
+      <h2 className="text-2xl font-semibold">{selectedCharacter.name}</h2>
+      <img
+        src={selectedCharacter.image}
+        alt={selectedCharacter.name}
+        width={200}
+        className="rounded-lg mt-2"
+      />
       <p>
-        <span className="font-semibold">Rotation Period:</span>{' '}
-        {planetDetail.rotation_period}
+        <strong>Species:</strong> {selectedCharacter.species}
       </p>
       <p>
-        <span className="font-semibold">Climate:</span> {planetDetail.climate}
+        <strong>Status:</strong> {selectedCharacter.status}
       </p>
       <p>
-        <span className="font-semibold">Gravity:</span> {planetDetail.gravity}
-      </p>
-      <p>
-        <span className="font-semibold">Population:</span>{' '}
-        {planetDetail.population}
+        <strong>Gender:</strong> {selectedCharacter.gender}
       </p>
     </section>
   );
