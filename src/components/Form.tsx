@@ -1,32 +1,34 @@
 import { useSelector } from 'react-redux';
-import { FormState } from '../interfaces/interfaces';
 import { RootState } from '../store/store';
 
 interface FormProps {
-  onSubmit: (data: FormState) => void;
-  formData: FormState;
-  onChange?: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  formRef?: React.RefObject<HTMLFormElement | null>;
+  errors: Record<string, string>;
   onImageUpload: (base64: string) => void;
 }
 
 export default function Form({
   onSubmit,
-  formData,
-  onChange,
+  formRef,
+  errors,
   onImageUpload,
 }: FormProps) {
   const countries = useSelector((state: RootState) => state.form.countries);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // ✅ Validate file size and type
+      if (!['image/png', 'image/jpeg'].includes(file.type)) {
+        alert('Only PNG and JPEG files are allowed');
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        alert('File size should be less than 2MB');
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         onImageUpload(reader.result as string);
@@ -36,96 +38,52 @@ export default function Form({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {/* Name */}
+    <form onSubmit={onSubmit} ref={formRef}>
       <div>
         <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          placeholder="Name..."
-          value={formData.name}
-          onChange={onChange}
-        />
+        <input name="name" type="text" />
+        {errors.name && <p>{errors.name}</p>}
       </div>
 
-      {/* Age */}
       <div>
         <label htmlFor="age">Age</label>
-        <input
-          type="number"
-          id="age"
-          name="age"
-          placeholder="Age..."
-          min="0"
-          max="120"
-          value={formData.age}
-          onChange={onChange}
-        />
+        <input name="age" type="number" />
+        {errors.age && <p>{errors.age}</p>}
       </div>
 
-      {/* Email */}
       <div>
         <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="email@example.com"
-          value={formData.email}
-          onChange={onChange}
-        />
+        <input name="email" type="email" />
+        {errors.email && <p>{errors.email}</p>}
       </div>
 
-      {/* Password */}
       <div>
         <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={onChange}
-        />
+        <input name="password" type="password" />
+        {errors.password && <p>{errors.password}</p>}
       </div>
 
-      {/* Confirm Password */}
       <div>
-        <label htmlFor="confirmPassword">Confirm Password</label>
-        <input
-          id="confirmPassword"
-          type="password"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={onChange}
-        />
+        <label htmlFor="confirmPassword">Confirm</label>
+        <input name="confirmPassword" type="confirmPassword" />
+        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
       </div>
 
-      {/* Gender */}
       <div>
         <label htmlFor="gender">Gender</label>
-        <select
-          name="gender"
-          id="gender"
-          value={formData.gender}
-          onChange={onChange}
-        >
-          <option value="select">Select...</option>
+        <select name="gender">
+          <option value="">Select...</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
         </select>
+        {errors.gender && <span>{errors.gender}</span>}
       </div>
-
-      {/* Country */}
       <div>
         <label htmlFor="country">Country</label>
         <input
           id="country"
-          type="text"
+          type="country"
           name="country"
-          value={formData.country}
-          onChange={onChange}
           list="countries"
           placeholder="Start typing a country..."
         />
@@ -134,42 +92,22 @@ export default function Form({
             <option key={country} value={country} />
           ))}
         </datalist>
+        {errors.country && <p>{errors.country}</p>}
       </div>
 
-      {/* Accept Terms */}
-      <div>
-        <input
-          type="checkbox"
-          id="acceptTerms"
-          name="acceptTerms"
-          checked={formData.acceptTerms}
-          onChange={onChange}
-        />
-        <label htmlFor="acceptTerms">I accept the Terms & Conditions</label>
-      </div>
-
-      {/* Image */}
       <div>
         <label htmlFor="image">Upload Image</label>
-        <input
-          type="file"
-          id="image"
-          accept=".png, .jpeg"
-          onChange={handleImageUpload}
-        />
-        {formData.image && (
-          <img
-            src={formData.image}
-            alt="Preview"
-            style={{ width: '100px', height: '100px' }}
-          />
-        )}
+        <input type="file" accept=".png, .jpeg" onChange={handleImageChange} />
+        {errors.image && <p>{errors.image}</p>}
       </div>
 
-      {/* Submit Button */}
-      <button type="submit" disabled={!formData.acceptTerms}>
-        Submit
-      </button>
+      <div>
+        <input name="acceptTerms" type="checkbox" />
+        <label>I accept Terms & Conditions</label>
+        {errors.acceptTerms && <p>{errors.acceptTerms}</p>}
+      </div>
+
+      <button type="submit">Submit</button>
     </form>
   );
 }
