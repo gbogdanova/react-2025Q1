@@ -1,3 +1,9 @@
+//import Form from '../components/Form';
+
 export default function HookForm() {
-  return <div>HookForm</div>;
+  return (
+    <>
+      <h2>Hook Form</h2>
+    </>
+  );
 }
