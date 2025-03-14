@@ -1,4 +1,6 @@
+import { useSelector } from 'react-redux';
 import { FormState } from '../interfaces/interfaces';
+import { RootState } from '../store/store';
 
 interface FormProps {
   onSubmit: (data: FormState) => void;
@@ -6,15 +8,36 @@ interface FormProps {
   onChange?: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
+  onImageUpload: (base64: string) => void;
 }
 
-export default function Form({ onSubmit, formData, onChange }: FormProps) {
+export default function Form({
+  onSubmit,
+  formData,
+  onChange,
+  onImageUpload,
+}: FormProps) {
+  const countries = useSelector((state: RootState) => state.form.countries);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
   };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        onImageUpload(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit}>
+      {/* Name */}
       <div>
         <label htmlFor="name">Name</label>
         <input
@@ -27,10 +50,11 @@ export default function Form({ onSubmit, formData, onChange }: FormProps) {
         />
       </div>
 
+      {/* Age */}
       <div>
         <label htmlFor="age">Age</label>
         <input
-          type="text"
+          type="number"
           id="age"
           name="age"
           placeholder="Age..."
@@ -41,6 +65,7 @@ export default function Form({ onSubmit, formData, onChange }: FormProps) {
         />
       </div>
 
+      {/* Email */}
       <div>
         <label htmlFor="email">Email</label>
         <input
@@ -53,6 +78,7 @@ export default function Form({ onSubmit, formData, onChange }: FormProps) {
         />
       </div>
 
+      {/* Password */}
       <div>
         <label htmlFor="password">Password</label>
         <input
@@ -64,6 +90,7 @@ export default function Form({ onSubmit, formData, onChange }: FormProps) {
         />
       </div>
 
+      {/* Confirm Password */}
       <div>
         <label htmlFor="confirmPassword">Confirm Password</label>
         <input
@@ -75,6 +102,7 @@ export default function Form({ onSubmit, formData, onChange }: FormProps) {
         />
       </div>
 
+      {/* Gender */}
       <div>
         <label htmlFor="gender">Gender</label>
         <select
@@ -89,25 +117,59 @@ export default function Form({ onSubmit, formData, onChange }: FormProps) {
         </select>
       </div>
 
-      {/* <label htmlFor="image">
-            Upload Image:
-            <input
-              type="file"
-              id="image"
-              accept=".png, .jpeg"
-            />
-          </label> */}
+      {/* Country */}
+      <div>
+        <label htmlFor="country">Country</label>
+        <input
+          id="country"
+          type="text"
+          name="country"
+          value={formData.country}
+          onChange={onChange}
+          list="countries"
+          placeholder="Start typing a country..."
+        />
+        <datalist id="countries">
+          {countries.map((country) => (
+            <option key={country} value={country} />
+          ))}
+        </datalist>
+      </div>
 
+      {/* Accept Terms */}
       <div>
         <input
           type="checkbox"
+          id="acceptTerms"
           name="acceptTerms"
           checked={formData.acceptTerms}
           onChange={onChange}
         />
-        <label>I accept the Terms & Conditions</label>
+        <label htmlFor="acceptTerms">I accept the Terms & Conditions</label>
       </div>
-      <button type="submit">Submit</button>
+
+      {/* Image */}
+      <div>
+        <label htmlFor="image">Upload Image</label>
+        <input
+          type="file"
+          id="image"
+          accept=".png, .jpeg"
+          onChange={handleImageUpload}
+        />
+        {formData.image && (
+          <img
+            src={formData.image}
+            alt="Preview"
+            style={{ width: '100px', height: '100px' }}
+          />
+        )}
+      </div>
+
+      {/* Submit Button */}
+      <button type="submit" disabled={!formData.acceptTerms}>
+        Submit
+      </button>
     </form>
   );
 }

@@ -13,7 +13,9 @@ export default function UncontrolledForm() {
     password: '',
     confirmPassword: '',
     gender: '',
+    country: '',
     acceptTerms: false,
+    image: '',
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,6 +39,13 @@ export default function UncontrolledForm() {
     }
   };
 
+  const handleImageUpload = (base64: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      image: base64,
+    }));
+  };
+
   const handleSubmit = (data: FormState) => {
     dispatch(setSubmission(data));
     navigate('/');
@@ -48,6 +57,7 @@ export default function UncontrolledForm() {
         onSubmit={handleSubmit}
         formData={formDada}
         onChange={handleChange}
+        onImageUpload={handleImageUpload}
       />
     </>
   );

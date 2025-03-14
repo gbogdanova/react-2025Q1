@@ -6,7 +6,8 @@ export interface FormState {
   confirmPassword: string;
   gender: string;
   acceptTerms: boolean;
-  // image: string | null;
+  country: string;
+  image: string | null;
 }
 
 export interface DataState {

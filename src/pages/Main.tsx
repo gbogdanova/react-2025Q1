@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
+import noImage from '../assets/no-image-available.jpg';
 
 export default function Main() {
   const submissions = useSelector((state: RootState) => state.form.submissions);
@@ -10,6 +11,19 @@ export default function Main() {
       <ul>
         {submissions.map((sb, index) => (
           <li key={index}>
+            {sb.image ? (
+              <img
+                src={sb.image}
+                alt="Uploaded"
+                style={{ width: '100px', height: '100px' }}
+              />
+            ) : (
+              <img
+                src={noImage}
+                alt="noImage"
+                style={{ width: '100px', height: '100px' }}
+              />
+            )}
             <p>{sb.name}</p>
             <p>{sb.age}</p>
             <p>{sb.email}</p>
