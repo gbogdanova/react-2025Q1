@@ -19,7 +19,6 @@ export default function Form({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // ✅ Validate file size and type
       if (!['image/png', 'image/jpeg'].includes(file.type)) {
         alert('Only PNG and JPEG files are allowed');
         return;

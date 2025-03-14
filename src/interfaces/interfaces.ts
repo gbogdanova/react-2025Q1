@@ -7,7 +7,7 @@ export interface FormState {
   gender: string;
   acceptTerms: boolean;
   country: string;
-  image: string | null;
+  image?: string | null;
 }
 
 export interface DataState {

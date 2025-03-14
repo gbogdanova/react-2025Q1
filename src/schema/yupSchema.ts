@@ -36,19 +36,25 @@ export const formSchema = yup.object().shape({
 
   acceptTerms: yup
     .boolean()
+    .required('You must accept the Terms and Conditions')
     .oneOf([true], 'You must accept the Terms and Conditions'),
 
   country: yup.string().required('Country is required'),
 
   image: yup
-    .mixed()
+    .string()
+    .nullable()
     .notRequired()
     .test('fileSize', 'Image size is too large', (value) => {
       if (!value) return true;
-      return (value as File).size <= 2 * 1024 * 1024;
+      // Approximate size limit for base64 (~2MB)
+      return value.length <= 3_000_000;
     })
     .test('fileType', 'Only PNG or JPEG files are allowed', (value) => {
       if (!value) return true;
-      return ['image/png', 'image/jpeg'].includes((value as File).type);
+      return (
+        value.startsWith('data:image/png') ||
+        value.startsWith('data:image/jpeg')
+      );
     }),
 });

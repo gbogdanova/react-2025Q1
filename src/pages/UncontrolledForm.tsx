@@ -27,7 +27,6 @@ export default function UncontrolledForm() {
 
     if (!formRef.current) return;
 
-    // ✅ Collect form data using FormData
     const formData = new FormData(formRef.current);
     const data: FormState = {
       name: formData.get('name') as string,
@@ -42,11 +41,8 @@ export default function UncontrolledForm() {
     };
 
     try {
-      // ✅ Validate using Yup schema
       await formSchema.validate(data, { abortEarly: false });
-      setErrors({}); // Clear previous errors
-
-      // ✅ Dispatch to Redux if validation passes
+      setErrors({});
       dispatch(setSubmission(data));
       navigate('/');
     } catch (err) {
