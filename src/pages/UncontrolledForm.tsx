@@ -16,9 +16,11 @@ export default function UncontrolledForm() {
   const handleImageUpload = (base64: string) => {
     if (formRef.current) {
       const imageInput = formRef.current.elements.namedItem(
-        'image'
+        'hiddenImage'
       ) as HTMLInputElement;
-      imageInput.value = base64;
+      if (imageInput) {
+        imageInput.value = base64;
+      }
     }
   };
 
@@ -37,7 +39,7 @@ export default function UncontrolledForm() {
       gender: formData.get('gender') as string,
       country: formData.get('country') as string,
       acceptTerms: formData.get('acceptTerms') === 'on',
-      image: formData.get('image') as string,
+      image: formData.get('hiddenImage') as string, // ✅ Use hidden input value
     };
 
     try {
@@ -59,14 +61,11 @@ export default function UncontrolledForm() {
   };
 
   return (
-    <>
-      <h2>Uncontrolled Form</h2>
-      <Form
-        onSubmit={handleSubmit}
-        formRef={formRef}
-        errors={errors}
-        onImageUpload={handleImageUpload}
-      />
-    </>
+    <Form
+      onSubmit={handleSubmit}
+      formRef={formRef}
+      errors={errors}
+      onImageUpload={handleImageUpload}
+    />
   );
 }

@@ -30,83 +30,161 @@ export default function Form({
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        onImageUpload(reader.result as string);
+        const base64 = reader.result as string;
+        onImageUpload(base64);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const inputBox = 'grid grid-cols-3 gap-4 items-start mb-4 min-h-[5rem]';
+  const label = 'col-span-1 min-h-[3rem] flex items-center font-medium';
+  const inBox = 'col-span-2 min-h-[3rem]';
+  const input = 'border p-2 rounded w-full';
+  const error = 'text-red-500 mt-1 text-sm';
+
   return (
-    <form onSubmit={onSubmit} ref={formRef}>
-      <div>
-        <label htmlFor="name">Name</label>
-        <input name="name" type="text" />
-        {errors.name && <p>{errors.name}</p>}
+    <form
+      onSubmit={onSubmit}
+      ref={formRef}
+      className="flex flex-col gap-6 p-10 border rounded-lg shadow-md max-w-xl mx-auto my-4"
+    >
+      {/* Name */}
+      <div className={inputBox}>
+        <label htmlFor="name" className={label}>
+          Name
+        </label>
+        <div className={inBox}>
+          <input name="name" type="text" className={input} />
+          {errors.name && <p className={error}>{errors.name}</p>}
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="age">Age</label>
-        <input name="age" type="number" />
-        {errors.age && <p>{errors.age}</p>}
+      {/* Age */}
+      <div className={inputBox}>
+        <label htmlFor="age" className={label}>
+          Age
+        </label>
+        <div className={inBox}>
+          <input name="age" type="number" className={input} />
+          {errors.age && <p className={error}>{errors.age}</p>}
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="email">Email</label>
-        <input name="email" type="email" />
-        {errors.email && <p>{errors.email}</p>}
+      {/* Email */}
+      <div className={inputBox}>
+        <label htmlFor="email" className={label}>
+          Email
+        </label>
+        <div className={inBox}>
+          <input name="email" type="email" className={input} />
+          {errors.email && <p className={error}>{errors.email}</p>}
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="password">Password</label>
-        <input name="password" type="password" />
-        {errors.password && <p>{errors.password}</p>}
+      {/* Password */}
+      <div className={inputBox}>
+        <label htmlFor="password" className={label}>
+          Password
+        </label>
+        <div className={inBox}>
+          <input name="password" type="password" className={input} />
+          {errors.password && <p className={error}>{errors.password}</p>}
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="confirmPassword">Confirm</label>
-        <input name="confirmPassword" type="confirmPassword" />
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+      {/* Confirm Password */}
+      <div className={inputBox}>
+        <label htmlFor="confirmPassword" className={label}>
+          Confirm Password
+        </label>
+        <div className={inBox}>
+          <input name="confirmPassword" type="password" className={input} />
+          {errors.confirmPassword && (
+            <p className={error}>{errors.confirmPassword}</p>
+          )}
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="gender">Gender</label>
-        <select name="gender">
-          <option value="">Select...</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
-        {errors.gender && <span>{errors.gender}</span>}
+      {/* Gender */}
+      <div className={inputBox}>
+        <label htmlFor="gender" className={label}>
+          Gender
+        </label>
+        <div className={inBox}>
+          <select name="gender" className={input}>
+            <option value="">Select...</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+          {errors.gender && <p className={error}>{errors.gender}</p>}
+        </div>
       </div>
-      <div>
-        <label htmlFor="country">Country</label>
+
+      {/* Country */}
+      <div className={inputBox}>
+        <label htmlFor="country" className={label}>
+          Country
+        </label>
+        <div className={inBox}>
+          <input
+            id="country"
+            type="text"
+            name="country"
+            list="countries"
+            placeholder="Start typing a country..."
+            className={input}
+          />
+          <datalist id="countries">
+            {countries.map((country) => (
+              <option key={country} value={country} />
+            ))}
+          </datalist>
+          {errors.country && <p className={error}>{errors.country}</p>}
+        </div>
+      </div>
+
+      {/* Upload Image */}
+      <div className={inputBox}>
+        <label htmlFor="image" className={label}>
+          Upload Image
+        </label>
+        <div className={inBox}>
+          <input
+            id="image"
+            type="file"
+            accept=".png, .jpeg"
+            onChange={handleImageChange}
+            className="file:border file:rounded file:px-4 file:py-2 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer w-full"
+          />
+          {errors.image && <p className={error}>{errors.image}</p>}
+        </div>
+      </div>
+
+      <input type="hidden" name="hiddenImage" />
+      <div className={inputBox}>
         <input
-          id="country"
-          type="country"
-          name="country"
-          list="countries"
-          placeholder="Start typing a country..."
+          id="acceptTerms"
+          name="acceptTerms"
+          type="checkbox"
+          className="w-5 h-5 accent-accent rounded focus:ring-2 focus:ring-offset-2 focus:ring-accent mt-3.5 ml-20"
         />
-        <datalist id="countries">
-          {countries.map((country) => (
-            <option key={country} value={country} />
-          ))}
-        </datalist>
-        {errors.country && <p>{errors.country}</p>}
+
+        <div className={inBox}>
+          <label htmlFor="acceptTerms" className={label}>
+            I accept Terms & Conditions
+          </label>
+          {errors.acceptTerms && <p className={error}>{errors.acceptTerms}</p>}
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="image">Upload Image</label>
-        <input type="file" accept=".png, .jpeg" onChange={handleImageChange} />
-        {errors.image && <p>{errors.image}</p>}
-      </div>
-
-      <div>
-        <input name="acceptTerms" type="checkbox" />
-        <label>I accept Terms & Conditions</label>
-        {errors.acceptTerms && <p>{errors.acceptTerms}</p>}
-      </div>
-
-      <button type="submit">Submit</button>
+      {/* Submit Button */}
+      <button
+        type="submit"
+        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+      >
+        Submit
+      </button>
     </form>
   );
 }

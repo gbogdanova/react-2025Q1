@@ -7,16 +7,20 @@ export default function Main() {
 
   return (
     <div>
-      <h2>Submissions:</h2>
-      <ul>
+      <ul className="grid grid-cols-3 gap-6 m-10">
         {submissions.map((sb, index) => (
-          <li key={index}>
+          <li
+            key={index}
+            className="flex flex-col gap-2 justify-center items-center align- border-2 border-blue-800"
+          >
             {sb.image ? (
-              <img
-                src={sb.image}
-                alt="Uploaded"
-                style={{ width: '100px', height: '100px' }}
-              />
+              <div className="w-[100px]">
+                <img
+                  src={sb.image}
+                  alt="Uploaded"
+                  style={{ width: '100px', height: '100px' }}
+                />
+              </div>
             ) : (
               <img
                 src={noImage}
@@ -24,12 +28,12 @@ export default function Main() {
                 style={{ width: '100px', height: '100px' }}
               />
             )}
-            <p>{sb.name}</p>
-            <p>{sb.age}</p>
-            <p>{sb.email}</p>
-            <p>{sb.password}</p>
-            <p>{sb.gender}</p>
-            <p>{sb.acceptTerms ? 'Yes' : 'No'}</p>
+            <p>Name: {sb.name}</p>
+            <p>Age: {sb.age}</p>
+            <p>Email: {sb.email}</p>
+            <p>Password: {sb.password}</p>
+            <p>Gender: {sb.gender}</p>
+            <p>Accepted: {sb.acceptTerms ? 'Yes' : 'No'}</p>
           </li>
         ))}
       </ul>
