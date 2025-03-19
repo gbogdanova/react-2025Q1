@@ -10,7 +10,6 @@ export default function CardList({ countries }: CardListProp) {
         <ul>
           {countries.map((country, ind) => (
             <li key={ind}>
-              <div>{country.name.official}</div>
               <div>{country.name.common}</div>
               <div>{country.region}</div>
               <div>{country.population}</div>

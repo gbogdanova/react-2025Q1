@@ -8,39 +8,35 @@ import Filter from './components/Filter';
 export default function App() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [region, setRegion] = useState<string>('');
-
-  const fetchCountries = async (query: string) => {
-    let url = 'https://restcountries.com/v3.1/all';
-    if (query) {
-      url = `https://restcountries.com/v3.1/name/${query}`;
-    }
-
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('Failed to fetch countries');
-      const data: Country[] = await response.json();
-      console.log(data);
-      setCountries(data);
-    } catch (error) {
-      console.error(error);
-      setCountries([]);
-    }
-  };
+  const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
-    fetchCountries('');
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch('https://restcountries.com/v3.1/all');
+        if (!response.ok) throw new Error('Failed to fetch countries');
+        const data: Country[] = await response.json();
+        console.log(data);
+        setCountries(data);
+      } catch (error) {
+        console.error(error);
+        setCountries([]);
+      }
+    };
+    fetchCountries();
   }, []);
-
-  const handleSearch = (query: string) => {
-    fetchCountries(query);
-  };
 
   const filterCountries = useMemo(() => {
     return countries.filter((country) => {
       const matchesRegion = region ? country.region === region : true;
-      return matchesRegion;
+      const matchSearch = search ? country.name.common.includes(search) : true;
+      return matchesRegion && matchSearch;
     });
-  }, [countries, region]);
+  }, [countries, region, search]);
+
+  const handleSearch = (searchQuary: string) => {
+    setSearch(searchQuary);
+  };
 
   const handleFilter = (selectedRegion: string) => {
     setRegion(selectedRegion === 'all' ? '' : selectedRegion);

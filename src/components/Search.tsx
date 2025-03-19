@@ -13,7 +13,6 @@ export default function Search({ onSearch }: SearchProps) {
 
   const handleSearch = () => {
     onSearch(searchQuery.current);
-    searchQuery.current = '';
   };
 
   return (
