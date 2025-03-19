@@ -5,7 +5,7 @@ import CardList from './components/CardList';
 import Search from './components/Search';
 import Filter from './components/Filter';
 
-function App() {
+export default function App() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [region, setRegion] = useState<string>('');
 
@@ -54,5 +54,3 @@ function App() {
     </>
   );
 }
-
-export default App;
