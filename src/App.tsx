@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Country from './interfaces';
 import CardList from './components/CardList';
@@ -11,6 +11,7 @@ export default function App() {
   const [region, setRegion] = useState<string>('');
   const [search, setSearch] = useState<string>('');
   const [sort, setSort] = useState<string>('');
+  const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -18,7 +19,6 @@ export default function App() {
         const response = await fetch('https://restcountries.com/v3.1/all');
         if (!response.ok) throw new Error('Failed to fetch countries');
         const data: Country[] = await response.json();
-        console.log(data);
         setCountries(data);
       } catch (error) {
         console.error(error);
@@ -28,7 +28,7 @@ export default function App() {
     fetchCountries();
   }, []);
 
-  const filterCountries = useMemo(() => {
+  useEffect(() => {
     const filtered = countries.filter((country) => {
       const matchesRegion = region ? country.region === region : true;
       const matchSearch = search ? country.name.common.includes(search) : true;
@@ -37,20 +37,19 @@ export default function App() {
 
     switch (sort) {
       case '1':
-        return filtered.sort((a, b) => a.population - b.population);
+        filtered.sort((a, b) => a.population - b.population);
+        break;
       case '2':
-        return filtered.sort((a, b) => b.population - a.population);
+        filtered.sort((a, b) => b.population - a.population);
+        break;
       case '3':
-        return filtered.sort((a, b) =>
-          a.name.common.localeCompare(b.name.common)
-        );
+        filtered.sort((a, b) => a.name.common.localeCompare(b.name.common));
+        break;
       case '4':
-        return filtered.sort((a, b) =>
-          b.name.common.localeCompare(a.name.common)
-        );
-      default:
-        return filtered;
+        filtered.sort((a, b) => b.name.common.localeCompare(a.name.common));
+        break;
     }
+    setFilteredCountries(filtered);
   }, [countries, region, search, sort]);
 
   const handleSearch = (searchQuary: string) => {
@@ -71,8 +70,7 @@ export default function App() {
         <Filter onFilter={handleFilter} />
         <Search onSearch={handleSearch} />
       </header>
-
-      <CardList countries={filterCountries} />
+      <CardList countries={filteredCountries} />
     </>
   );
 }

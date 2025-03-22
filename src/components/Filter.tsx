@@ -4,8 +4,10 @@ interface FilterProps {
 
 export default function Filter({ onFilter }: FilterProps) {
   return (
-    <>
-      <label htmlFor="filter">Filter by region:</label>
+    <div>
+      <label htmlFor="filter" className="mr-3">
+        Filter by region:
+      </label>
       <select
         name="filter"
         onChange={(e) => {
@@ -20,6 +22,6 @@ export default function Filter({ onFilter }: FilterProps) {
         <option value="Europe">Europe</option>
         <option value="Oceania">Oceania</option>
       </select>
-    </>
+    </div>
   );
 }

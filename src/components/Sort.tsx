@@ -5,7 +5,9 @@ interface SortProps {
 export default function Sort({ onSort }: SortProps) {
   return (
     <div>
-      <label htmlFor="sort">Sort:</label>
+      <label htmlFor="sort" className="mr-3">
+        Sort:
+      </label>
       <select
         name="sort"
         defaultValue=""
