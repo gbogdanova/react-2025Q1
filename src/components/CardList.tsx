@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import Country from '../interfaces';
 import Card from './Card';
 
@@ -7,41 +7,40 @@ interface CardListProp {
 }
 
 export default function CardList({ countries }: CardListProp) {
-  const [visitedCountries, setVisitedCountries] = useState<string[]>([]);
-
-  useEffect(() => {
-    setVisitedCountries(
-      JSON.parse(localStorage.getItem('visitedCountries') || '[]')
-    );
+  const visitedCountries = useMemo(() => {
+    return JSON.parse(localStorage.getItem('visitedCountries') || '[]');
   }, []);
-  const toggleVisited = (country: string) => {
-    const newVisit = visitedCountries.includes(country)
-      ? visitedCountries.filter((name) => name != country)
-      : [...visitedCountries, country];
 
-    setVisitedCountries(newVisit);
-    localStorage.setItem('visitedCountries', JSON.stringify(newVisit));
-  };
+  const toggleVisited = useCallback(
+    (country: string) => {
+      const newVisit = visitedCountries.includes(country)
+        ? visitedCountries.filter((name: string) => name !== country)
+        : [...visitedCountries, country];
+
+      localStorage.setItem('visitedCountries', JSON.stringify(newVisit));
+    },
+    [visitedCountries]
+  );
 
   return (
     <>
       {countries.length > 0 ? (
         <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {countries.map((country, ind) => {
+          {countries.map((country) => {
             const isVisited = visitedCountries.includes(country.name.common);
 
             return (
               <Card
                 country={country}
                 isVisited={isVisited}
-                key={ind}
+                key={country.name.common}
                 toggle={toggleVisited}
               />
             );
           })}
         </ul>
       ) : (
-        <p>There is no countries</p>
+        <p>There are no countries</p>
       )}
     </>
   );

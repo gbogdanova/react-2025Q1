@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import './App.css';
 import Country from './interfaces';
 import CardList from './components/CardList';
@@ -11,7 +11,6 @@ export default function App() {
   const [region, setRegion] = useState<string>('');
   const [search, setSearch] = useState<string>('');
   const [sort, setSort] = useState<string>('');
-  const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -28,40 +27,41 @@ export default function App() {
     fetchCountries();
   }, []);
 
-  useEffect(() => {
+  const filterCountries = useMemo(() => {
     const filtered = countries.filter((country) => {
       const matchesRegion = region ? country.region === region : true;
       const matchSearch = search ? country.name.common.includes(search) : true;
       return matchesRegion && matchSearch;
     });
-
     switch (sort) {
       case '1':
-        filtered.sort((a, b) => a.population - b.population);
-        break;
+        return filtered.sort((a, b) => a.population - b.population);
       case '2':
-        filtered.sort((a, b) => b.population - a.population);
-        break;
+        return filtered.sort((a, b) => b.population - a.population);
       case '3':
-        filtered.sort((a, b) => a.name.common.localeCompare(b.name.common));
-        break;
+        return filtered.sort((a, b) =>
+          a.name.common.localeCompare(b.name.common)
+        );
       case '4':
-        filtered.sort((a, b) => b.name.common.localeCompare(a.name.common));
-        break;
+        return filtered.sort((a, b) =>
+          b.name.common.localeCompare(a.name.common)
+        );
+      default:
+        return filtered;
     }
-    setFilteredCountries(filtered);
   }, [countries, region, search, sort]);
 
-  const handleSearch = (searchQuary: string) => {
-    setSearch(searchQuary);
-  };
+  const handleSearch = useCallback((searchQuery: string) => {
+    setSearch(searchQuery);
+  }, []);
 
-  const handleFilter = (selectedRegion: string) => {
+  const handleFilter = useCallback((selectedRegion: string) => {
     setRegion(selectedRegion === 'all' ? '' : selectedRegion);
-  };
-  const handleSort = (sort: string) => {
-    setSort(sort);
-  };
+  }, []);
+
+  const handleSort = useCallback((sortOption: string) => {
+    setSort(sortOption);
+  }, []);
 
   return (
     <>
@@ -70,7 +70,7 @@ export default function App() {
         <Filter onFilter={handleFilter} />
         <Search onSearch={handleSearch} />
       </header>
-      <CardList countries={filteredCountries} />
+      <CardList countries={filterCountries} />
     </>
   );
 }

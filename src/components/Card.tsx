@@ -1,3 +1,4 @@
+import React from 'react';
 import Country from '../interfaces';
 
 interface CardProps {
@@ -33,4 +34,4 @@ const Card = ({ country, isVisited, toggle }: CardProps) => {
   );
 };
 
-export default Card;
+export default React.memo(Card);
