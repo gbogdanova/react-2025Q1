@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import Country from '../interfaces';
 import Card from './Card';
 
@@ -7,16 +7,21 @@ interface CardListProp {
 }
 
 export default function CardList({ countries }: CardListProp) {
-  const visitedCountries = useMemo(() => {
+  const initialVisitedCountries = useMemo(() => {
     return JSON.parse(localStorage.getItem('visitedCountries') || '[]');
   }, []);
+
+  const [visitedCountries, setVisitedCountries] = useState<string[]>(
+    initialVisitedCountries
+  );
 
   const toggleVisited = useCallback(
     (country: string) => {
       const newVisit = visitedCountries.includes(country)
-        ? visitedCountries.filter((name: string) => name !== country)
+        ? visitedCountries.filter((name) => name !== country)
         : [...visitedCountries, country];
 
+      setVisitedCountries(newVisit);
       localStorage.setItem('visitedCountries', JSON.stringify(newVisit));
     },
     [visitedCountries]
